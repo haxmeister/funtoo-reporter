@@ -24,8 +24,8 @@ use warnings;
 
 use JSON;
 use Term::ANSIColor;
-use lib "$ENV{PWD}/modules";
-use Report;
+use lib "$ENV{PWD}/lib";
+use Funtoo::Report;
 use Search::Elasticsearch;
 
 ## elasticsearch node to send the report too:
@@ -113,7 +113,7 @@ sub show_help {
 
 ## let's read the config file and generate the report
 sub report_from_config {
-    my %config = Report::user_config(); # fetch/parse the user config
+    my %config = Funtoo::Report::user_config(); # fetch/parse the user config
     my %hash;
     
     # look for a UUID in the config file and
@@ -122,23 +122,23 @@ sub report_from_config {
         $es_config{'id'} = $config{'UUID'};
     }
     else {
-        $es_config{'id'} = Report::add_uuid();
+        $es_config{'id'} = Funtoo::Report::add_uuid();
     }
     
     # let's load a hash with the possible config file options as keys
     # and the values will be a pointer to the function that generates
     # the associated information
     my %reports = (
-        'boot-dir-info' => \&Report::get_boot_dir_info,
-        'cpu-info'      => \&Report::get_cpu_info,
-        'kernel-info'   => \&Report::get_kernel_info,
-        'kit-info'      => \&Report::get_kit_info,
-        'mem-info'      => \&Report::get_mem_info,
-        'profile-info'  => \&Report::get_profile_info,
-        'version-info'  => \&Report::get_version_info,
-        'world-info'    => \&Report::get_world_info,
-        'chassis-info'  => \&Report::get_chassis_info,
-        'installed-pkgs'=> \&Report::get_all_installed_pkg
+        'boot-dir-info' => \&Funtoo::Report::get_boot_dir_info,
+        'cpu-info'      => \&Funtoo::Report::get_cpu_info,
+        'kernel-info'   => \&Funtoo::Report::get_kernel_info,
+        'kit-info'      => \&Funtoo::Report::get_kit_info,
+        'mem-info'      => \&Funtoo::Report::get_mem_info,
+        'profile-info'  => \&Funtoo::Report::get_profile_info,
+        'version-info'  => \&Funtoo::Report::get_version_info,
+        'world-info'    => \&Funtoo::Report::get_world_info,
+        'chassis-info'  => \&Funtoo::Report::get_chassis_info,
+        'installed-pkgs'=> \&Funtoo::Report::get_all_installed_pkg
     );
     
     # check each key and see if it's in the config file
@@ -160,7 +160,7 @@ sub report_from_config {
 	
 	## adding version number to report
 	#
-	$hash{'version'} = Report::version();
+	$hash{'version'} = Funtoo::Report::version();
 
     return %hash;
 }
