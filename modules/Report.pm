@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use Exporter;
 use JSON;
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 
 our @EXPORT_OK = qw(user_config
                     get_cpu_info
