@@ -117,9 +117,16 @@ sub report_time{
     my $r_sec   = sprintf("%02d",$time[0]);
     my $gmt_offset_hours = (timegm(@time) - timelocal(@time))/60/60;                                                
     my $gmt_offset_mins  = ($gmt_offset_hours - int($gmt_offset_hours)) * 60;
-    my $gmt_offset_str   = sprintf("%03d",$gmt_offset_hours).":"
-                                      .sprintf("%02d",$gmt_offset_mins);
-    
+    my $gmt_offset_str = "";
+
+    if ($gmt_offset_hours > 0) {
+      $gmt_offset_str   = sprintf("\+"."%02d",$gmt_offset_hours).":".sprintf("%02d",$gmt_offset_mins);
+                                  } elsif ($gmt_offset_hours == 0) {
+                                    $gmt_offset_str   = "";
+                                  } elsif ($gmt_offset_hours < 0) {
+                                    $gmt_offset_str   = sprintf("%03d",$gmt_offset_hours).":".sprintf("%02d",$gmt_offset_mins);
+                                  }
+
     if ($option eq "long"){
         return "$r_year"."-"."$r_month"."-"."$r_mday".
         "T"."$r_hr:$r_min:$r_sec"."$gmt_offset_str";
