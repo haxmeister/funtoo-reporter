@@ -9,11 +9,9 @@
 ##
 ## written with the following additional packages
 ##
-## from gentoo/funtoo repository:
+## from funtoo repository:
 ## dev-perl/JSON-2.900.0
-##
-## and from CPAN
-## Search::Elasticsearch
+## dev-perl/Search-Elasticsearch-6.00
 ##
 ## also from Github
 ## The accompanying "Report" module placed in
