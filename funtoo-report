@@ -71,7 +71,7 @@ if (@ARGV) {
 
             # load params for elastic search into report
             index => $es_config{index},
-            type  => 'user',
+            type  => 'report',
 
             # plugging in our UUID
             id    => '',
