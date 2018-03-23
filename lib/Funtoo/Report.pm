@@ -473,11 +473,15 @@ sub get_filesystem_info {
                 push @{$hash{$device->{name}}{fstypes}} , $device->{fstype};
                 $hash{$device->{name}}{children} = 0;
             }
+            
+            # get the device size
             $hash{$device->{name}}{size} = $device->{size} + 0;
             
             # Counting the number of devices
             $hash{'device-count'} = $hash{'device-count'} + 1;
             
+            # get the tran (connection type)
+            $hash{$device->{name}}{tran} = $device->{tran};
         }
     }
     else {
