@@ -445,6 +445,8 @@ sub get_net_info {
 
 ##
 ## fetching lsblk output
+## reconstructing the output to show a more flattened list
+## with only info that actually has value as a statistic
 ##
 sub get_filesystem_info {
     my %hash;
@@ -471,7 +473,7 @@ sub get_filesystem_info {
                 push @{$hash{$device->{name}}{fstypes}} , $device->{fstype};
                 $hash{$device->{name}}{children} = 0;
             }
-            $hash{$device->{name}}{size} = $device->{size};
+            $hash{$device->{name}}{size} = $device->{size} + 0;
             
             # Counting the number of devices
             $hash{'device-count'} = $hash{'device-count'} + 1;
