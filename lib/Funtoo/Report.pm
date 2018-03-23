@@ -453,6 +453,7 @@ sub get_filesystem_info {
     my $lsblk_decoded;
     my $lsblk
         = 'lsblk --bytes --json -o NAME,FSTYPE,SIZE,PARTTYPE,TRAN,HOTPLUG';
+    $hash{'device-count'} = 0;
     if ( my $json_from_lsblk = `$lsblk` ) {
         $lsblk_decoded = decode_json($json_from_lsblk);
         foreach my $device (@{$lsblk_decoded->{blockdevices}}){
