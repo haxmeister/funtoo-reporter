@@ -447,46 +447,38 @@ sub get_net_info {
 ## fetching lsblk output
 ##
 sub get_filesystem_info {
-    my $hash;
+    my %hash;
+    my $lsblk_decoded;
     my $lsblk
-        = 'lsblk --bytes --json -o NAME,FSTYPE,SIZE,MOUNTPOINT,PARTTYPE,RM,HOTPLUG,TRAN';
+        = 'lsblk --bytes --json -o NAME,FSTYPE,SIZE,PARTTYPE,TRAN,HOTPLUG';
     if ( my $json_from_lsblk = `$lsblk` ) {
-        $hash = decode_json($json_from_lsblk);
+        $lsblk_decoded = decode_json($json_from_lsblk);
+        foreach my $device (@{$lsblk_decoded->{blockdevices}}){
 
-        # iterate through the block device tree, fixing it up a little so
-        # ElasticSearch can handle it; it doesn't like lists of objects, so we
-        # convert those to objects indexed by device name
-        my @stack = ( \$hash->{blockdevices} );
-        while ( my $list = pop @stack ) {
+            # if there are children to this device, let's deal with them
+            if ( defined ($device->{children}) ){
+                foreach my $child ( @{$device->{children}} ){
 
-            # start hash to replace the list
-            my %rep;
+                    # collecting child filesystem types on this device
+                    push @{ $hash{$device->{name}} {'fstypes'} }, $child->{fstype};
 
-            # iterate through the list
-            for my $dev ( @{ ${$list} } ) {
-
-                # coerce device's size to a number
-                $dev->{size} += 0;
-
-                # put this device into the replacement hashref by name
-                $rep{ $dev->{name} } = $dev;
-
-                # if this device has a list of children, push a reference to
-                # that list onto the stack for the next round
-                if ( defined $dev->{children} ) {
-                    push @stack, \$dev->{children};
+                    # keeping count of how many children are on this device
+                    $hash{$device->{name}}{children} = $hash{$device->{name}}{children} + 1;
                 }
             }
-
-            # run replacement
-            ${$list} = \%rep;
+            # if there are no children
+            else{
+                push @{$hash{$device->{name}}{fstypes}} , $device->{fstype};
+                $hash{$device->{name}}{children} = 0;
+            }
+            $hash{$device->{name}}{size} = $device->{size};
         }
     }
     else {
         push_error("Unable to retrieve output from $lsblk: $ERRNO");
         return;
     }
-    return $hash;
+    return \%hash;
 }
 
 ##
