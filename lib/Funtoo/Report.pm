@@ -472,6 +472,10 @@ sub get_filesystem_info {
                 $hash{$device->{name}}{children} = 0;
             }
             $hash{$device->{name}}{size} = $device->{size};
+            
+            # Counting the number of devices
+            $hash{'device-count'} = $hash{'device-count'} + 1;
+            
         }
     }
     else {
