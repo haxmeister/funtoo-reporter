@@ -482,6 +482,9 @@ sub get_filesystem_info {
             # if there are no children on this device
             # stat the device itself
             else{
+				if (not $device->{'fstype'}){
+					$device->{'fstype'}="undef-fs";
+				} 
 				if ( defined($hash{$device->{'fstype'}}) ){
 					$hash{'fstypes'}{$device->{'fstype'}} += $device->{size};
 				}
