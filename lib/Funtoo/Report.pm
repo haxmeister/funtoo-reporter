@@ -457,32 +457,51 @@ sub get_filesystem_info {
     if ( my $json_from_lsblk = `$lsblk` ) {
         $lsblk_decoded = decode_json($json_from_lsblk);
         foreach my $device (@{$lsblk_decoded->{blockdevices}}){
-
+			
+			# skip hotplug devices like CDROMS
+			if ( $device->{hotplug} ){ next; }
+			
             # if there are children to this device, let's deal with them
             if ( defined ($device->{children}) ){
                 foreach my $child ( @{$device->{children}} ){
 
-                    # collecting child filesystem types on this device
-                    push @{ $hash{$device->{name}} {'fstypes'} }, $child->{fstype};
-
-                    # keeping count of how many children are on this device
-                    $hash{$device->{name}}{children} = $hash{$device->{name}}{children} + 1;
+                    # if the fstype exists in the hash already, add 
+                    # the size of this child
+                    if (defined($hash{$child->{fstype}}) ){
+						$hash{'fstypes'}{$child->{fstype}} += $child->{'size'};
+					}
+					
+					# if the fstype does not exist in the hash already,
+					# just plug the value in and create it
+					else{
+						$hash{'fstypes'}{$child->{fstype}} = $child->{'size'} + 0;
+					}
                 }
             }
-            # if there are no children
+            
+            # if there are no children on this device
+            # stat the device itself
             else{
-                push @{$hash{$device->{name}}{fstypes}} , $device->{fstype};
-                $hash{$device->{name}}{children} = 0;
+				if ( defined($hash{$device->{'fstype'}}) ){
+					$hash{'fstypes'}{$device->{'fstype'}} += $device->{size};
+				}
+				else{
+					$hash{'fstypes'}{$device->{'fstype'}} = $device->{size};
+				}
+
+				if ( defined($hash{$device->{'tran'}}) ){
+					$hash{$device->{'tran'}} += 1;
+				}
+				else{
+					$hash{$device->{'tran'}} = 1;
+				}
             }
-            
-            # get the device size
-            $hash{$device->{name}}{size} = $device->{size} + 0;
-            
+
             # Counting the number of devices
-            $hash{'device-count'} = $hash{'device-count'} + 1;
+            $hash{'device-count'} += 1;
             
-            # get the tran (connection type)
-            $hash{$device->{name}}{tran} = $device->{tran};
+            # counting tran types
+            $hash{'tran-types'}{$device->{'tran'}} += 1;
         }
     }
     else {
