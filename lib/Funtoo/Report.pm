@@ -460,28 +460,30 @@ sub get_filesystem_info {
 
 			# skip hotplug devices like CDROMS
 			if ( $device->{hotplug} ){ next; }
-			
+
             # if there are children to this device, let's deal with them
             if ( defined ($device->{children}) ){
                 foreach my $child ( @{$device->{children}} ){
 
-                    # if the fstype is a null value
+                    # if the fstype is a null or empty value
 					# replace it with the string "null"
 					if ( defined $child->{fstype} ){
 						if ($child->{fstype} eq ''){
 							$child->{fstype} = 'Null';
 						}
 					}
+
+					# if it is undefined.. define it as Null
 					else{
 						$child->{fstype} = 'Null';
 					}
-					
+
 					# if the fstype exists in the hash already, add
 					# the size of this child
                     if (defined($hash{$child->{fstype}}) ){
 						$hash{'fstypes'}{$child->{fstype}} += $child->{'size'};
 					}
-					
+
 					# if the fstype does not exist in the hash already,
 					# just plug the value in and create it
 					else{
@@ -489,29 +491,37 @@ sub get_filesystem_info {
 					}
                 }
             }
-            
+
             # if there are no children on this device
             # stat the device itself
             else{
 
 				if ( defined($hash{$device->{'fstype'}}) ){
+
+					# the fstype is previously defined so lets add the number to it
 					$hash{'fstypes'}{$device->{'fstype'}} += $device->{size};
 				}
 				else{
+
+					# the fstype is not prev def so let's define it
 					$hash{'fstypes'}{$device->{'fstype'}} = $device->{size};
 				}
 
 				if ( defined($hash{$device->{'tran'}}) ){
+
+					# the tran is previously defined so lets the num to it
 					$hash{$device->{'tran'}} += 1;
 				}
 				else{
+
+					# the tran is not prev def so let's define it
 					$hash{$device->{'tran'}} = 1;
 				}
             }
 
             # Counting the number of devices
             $hash{'device-count'} += 1;
-            
+
             # counting tran types
             $hash{'tran-types'}{$device->{'tran'}} += 1;
         }
