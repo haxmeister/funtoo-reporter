@@ -458,9 +458,6 @@ sub get_filesystem_info {
         $lsblk_decoded = decode_json($json_from_lsblk);
         foreach my $device (@{$lsblk_decoded->{blockdevices}}){
 
-			if (not $device->{'fstype'}){
-				$device->{'fstype'}="undef-fs";
-			}
 			# skip hotplug devices like CDROMS
 			if ( $device->{hotplug} ){ next; }
 			
@@ -468,8 +465,19 @@ sub get_filesystem_info {
             if ( defined ($device->{children}) ){
                 foreach my $child ( @{$device->{children}} ){
 
-                    # if the fstype exists in the hash already, add 
-                    # the size of this child
+                    # if the fstype is a null value
+					# replace it with the string "null"
+					if ( defined $child->{fstype} ){
+						if ($child->{fstype} eq ''){
+							$child->{fstype} = 'Null';
+						}
+					}
+					else{
+						$child->{fstype} = 'Null';
+					}
+					
+					# if the fstype exists in the hash already, add
+					# the size of this child
                     if (defined($hash{$child->{fstype}}) ){
 						$hash{'fstypes'}{$child->{fstype}} += $child->{'size'};
 					}
@@ -1228,3 +1236,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 =cut
+
