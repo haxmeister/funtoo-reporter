@@ -489,7 +489,7 @@ sub get_filesystem_info {
 					# just plug the value in and create it
 					else{
 						$hash{'fstypes'}{$child->{fstype}}{size} = $child->{'size'} + 0;
-						$hash{'fstypes'}{$child->{fstype}}{count} = 1;
+						$hash{'fstypes'}{$child->{fstype}}{count} += 1;
 					}
                 }
             }
