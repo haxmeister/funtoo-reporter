@@ -481,13 +481,15 @@ sub get_filesystem_info {
 					# if the fstype exists in the hash already, add
 					# the size of this child
                     if (defined($hash{$child->{fstype}}) ){
-						$hash{'fstypes'}{$child->{fstype}} += $child->{'size'};
+						$hash{'fstypes'}{$child->{fstype}}{size} += $child->{'size'};
+						$hash{'fstypes'}{$child->{fstype}}{count} += 1;
 					}
 
 					# if the fstype does not exist in the hash already,
 					# just plug the value in and create it
 					else{
-						$hash{'fstypes'}{$child->{fstype}} = $child->{'size'} + 0;
+						$hash{'fstypes'}{$child->{fstype}}{size} = $child->{'size'} + 0;
+						$hash{'fstypes'}{$child->{fstype}}{count} = 1;
 					}
                 }
             }
@@ -499,17 +501,17 @@ sub get_filesystem_info {
 				if ( defined($hash{$device->{'fstype'}}) ){
 
 					# the fstype is previously defined so lets add the number to it
-					$hash{'fstypes'}{$device->{'fstype'}} += $device->{size};
+					$hash{'fstypes'}{$device->{'fstype'}}{size} += $device->{size};
 				}
 				else{
 
 					# the fstype is not prev def so let's define it
-					$hash{'fstypes'}{$device->{'fstype'}} = $device->{size};
+					$hash{'fstypes'}{$device->{'fstype'}}{size} = $device->{size};
 				}
 
 				if ( defined($hash{$device->{'tran'}}) ){
 
-					# the tran is previously defined so lets the num to it
+					# the tran is previously defined so add lets the num to it
 					$hash{$device->{'tran'}} += 1;
 				}
 				else{
