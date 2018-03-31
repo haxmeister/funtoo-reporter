@@ -524,6 +524,10 @@ sub get_filesystem_info {
         push_error("Unable to retrieve output from $lsblk: $ERRNO");
         return;
     }
+    # Convert the total size from bytes to GB
+    for my $fstype (keys %{$hash{fstypes} }) {
+        $hash{'fstypes'}{$fstype}{'size'} = sprintf '%.2f', ($hash{'fstypes'}{$fstype}{'size'})/(1024**3);
+    }
     return \%hash;
 }
 
@@ -601,7 +605,8 @@ sub get_mem_info {
             my ( $key, $value ) = $line =~ m/ (\S+) : \s* (\d+) /msx
                 or next;
             exists $hash{$key} or next;
-            $hash{$key} = $value + 0;
+            # Convert the size from KB to GB
+            $hash{$key} = sprintf '%.2f', ($value)/(1024**2);
         }
         close $fh;
     }
