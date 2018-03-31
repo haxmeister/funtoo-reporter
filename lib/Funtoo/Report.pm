@@ -478,19 +478,11 @@ sub get_filesystem_info {
 						$child->{fstype} = 'Null';
 					}
 
-					# if the fstype exists in the hash already, add
-					# the size of this child
-                    if (defined($hash{$child->{fstype}}) ){
-						$hash{'fstypes'}{$child->{fstype}}{size} += $child->{'size'};
-						$hash{'fstypes'}{$child->{fstype}}{count} += 1;
-					}
-
-					# if the fstype does not exist in the hash already,
-					# just plug the value in and create it
-					else{
-						$hash{'fstypes'}{$child->{fstype}}{size} = $child->{'size'} + 0;
-						$hash{'fstypes'}{$child->{fstype}}{count} += 1;
-					}
+					
+                    
+					$hash{'fstypes'}{$child->{fstype}}{size} += $child->{'size'};
+					$hash{'fstypes'}{$child->{fstype}}{count} += 1;
+					
                 }
             }
 
