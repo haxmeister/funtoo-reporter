@@ -527,6 +527,7 @@ sub get_filesystem_info {
     # Convert the total size from bytes to GB
     for my $fstype (keys %{$hash{fstypes} }) {
         $hash{'fstypes'}{$fstype}{'size'} = sprintf '%.2f', ($hash{'fstypes'}{$fstype}{'size'})/(1024**3);
+        $hash{'fstypes'}{$fstype}{'size'} += 0;
     }
     return \%hash;
 }
@@ -607,6 +608,7 @@ sub get_mem_info {
             exists $hash{$key} or next;
             # Convert the size from KB to GB
             $hash{$key} = sprintf '%.2f', ($value)/(1024**2);
+            $hash{$key} += 0;
         }
         close $fh;
     }
