@@ -14,7 +14,7 @@ use List::Util qw(any);            #core
 use Term::ANSIColor;               #core
 use Time::Piece;                   #core
 
-our $VERSION = '2.1.0-alpha';
+our $VERSION = '2.1.0-alpha-fs';
 
 ### getting some initialization done:
 my $config_file = '/etc/funtoo-report.conf';
@@ -478,11 +478,11 @@ sub get_filesystem_info {
 						$child->{fstype} = 'Null';
 					}
 
-					
-                    
+
+
 					$hash{'fstypes'}{$child->{fstype}}{size} += $child->{'size'};
 					$hash{'fstypes'}{$child->{fstype}}{count} += 1;
-					
+
                 }
             }
 
@@ -1070,7 +1070,7 @@ Funtoo::Report - Functions for retrieving and sending data on Funtoo Linux
 
 =head1 VERSION
 
-Version 2.0.1-alpha
+Version 2.1.0-alpha-fs
 
 =head1 DESCRIPTION
 
@@ -1247,4 +1247,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 =cut
-
