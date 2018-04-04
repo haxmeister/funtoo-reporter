@@ -614,7 +614,10 @@ sub get_mem_info {
 
             # if there's a hash bucket waiting for this value, add it
             exists $hash{$key} or next;
-            $hash{$key} = int $value;
+            
+            # Convert the size from KB to GB
+            $hash{$key} = sprintf '%.2f', ($value)/(1024**2);
+            $hash{$key} += 0;
         }
     }
     else {
