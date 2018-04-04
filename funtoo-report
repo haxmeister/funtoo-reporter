@@ -23,7 +23,7 @@ use Funtoo::Report;                #GIT
 use HTTP::Tiny;                    #core
 use Pod::Usage;                    #core
 
-our $VERSION = '2.0.1-alpha';
+our $VERSION = '2.1.0-alpha-fs';
 
 my %es_config = (
     node  => 'https://elk.liguros.net:9200',
