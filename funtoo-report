@@ -23,7 +23,7 @@ use Funtoo::Report;                #GIT
 use HTTP::Tiny;                    #core
 use Pod::Usage;                    #core
 
-our $VERSION = '2.1.0-alpha-fs';
+our $VERSION = '3.0.0-beta';
 
 my %es_config = (
     node  => 'https://elk.liguros.net:9200',
@@ -58,7 +58,7 @@ GetOptions(
 
     'debug|d'   => \$debug,
     'help|h'    => \&pod2usage,
-    'version|v' => sub {
+    'version|V' => sub {
         printf "funtoo-report: %s\nFuntoo::Report: %s\n", $VERSION,
             Funtoo::Report::version();
     },
@@ -140,7 +140,7 @@ funtoo-report - An anonymous Funtoo data reporting tool
     -s, --send          Sends the JSON report
     -d, --debug         Enables additional debug output
     -h, --help          Display this help text
-    -v, --version       Prints the version and exits
+    -V, --version       Prints the version and exits
 
 =head1 DESCRIPTION
 
@@ -156,7 +156,7 @@ None.
 
 =over 4
 
-=item C<-c>, C<--config-update>
+=item C<-u>, C<--config-update>
 
 Generate or update the configuration file C</etc/funtoo-report.conf>.
 
@@ -178,7 +178,7 @@ ElasticSearch server with the C<--send> option.
 
 Print usage help.
 
-=item C<-v>, C<--version>
+=item C<-V>, C<--version>
 
 Print script and module versions.
 

@@ -14,7 +14,7 @@ use List::Util qw(any);            #core
 use Term::ANSIColor;               #core
 use Time::Piece;                   #core
 
-our $VERSION = '2.1.0-alpha-fs';
+our $VERSION = '3.0.0-beta';
 
 ### getting some initialization done:
 my $config_file = '/etc/funtoo-report.conf';
@@ -614,7 +614,7 @@ sub get_mem_info {
 
             # if there's a hash bucket waiting for this value, add it
             exists $hash{$key} or next;
-            
+
             # Convert the size from KB to GB
             $hash{$key} = sprintf '%.2f', ($value)/(1024**2);
             $hash{$key} += 0;
@@ -1078,7 +1078,7 @@ Funtoo::Report - Functions for retrieving and sending data on Funtoo Linux
 
 =head1 VERSION
 
-Version 2.1.0-alpha-fs
+Version 3.0.0-beta
 
 =head1 DESCRIPTION
 
