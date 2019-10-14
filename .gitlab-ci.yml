@@ -1,0 +1,9 @@
+image: perl:latest
+
+before_script:
+  - perl -V
+
+test:
+  script:
+    - cpanm --quiet --installdeps --notest .
+    - perl Makefile.PL && make test
